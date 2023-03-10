@@ -1,0 +1,10 @@
+build/*
+*.obj
+*.exe
+*.ilk
+*.pdb
+*.txt
+
+!LICENSE.txt
+!README.txt
+!build/.gitkeep
