@@ -71,6 +71,9 @@ void Renderer::render()
 
         m_gui.end_frame();
         SDL_RenderPresent(m_renderer);
+
+        // Be nice to the CPU
+        SDL_Delay(static_cast<u32>(RENDER_TIME_STEP * 1000.0f));
     }
 }
 
