@@ -6,6 +6,9 @@ build/*
 *.txt
 *.ini
 
+!build/.gitkeep
+!build/Karmina_Bold.ttf
+!build/SDL2.dll
+
 !LICENSE.txt
 !README.txt
-!build/.gitkeep
