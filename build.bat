@@ -5,7 +5,7 @@ set MSVC_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\
 set CXXFLAGS=/std:c++14 /EHsc /W4 /WX /FC /MT /wd4996 /wd4201 /nologo %*
 set INCLUDES=/I"deps\include"
 set LIBS="deps\lib\SDL2\SDL2.lib" "deps\lib\SDL2\SDL2main.lib" shell32.lib
-set FILES="code\main.cpp" "deps\include\imgui\imgui*.cpp"
+set FILES="code\*.cpp" "deps\include\imgui\imgui*.cpp"
 
 call %MSVC_PATH%\vcvars64.bat
 
@@ -14,7 +14,6 @@ if not exist .\build mkdir build
 cl %CXXFLAGS% %INCLUDES% %FILES% /Fo:build\ /Fe:build\curves.exe /link %LIBS% /SUBSYSTEM:CONSOLE
 
 cd build
-del main.obj
-del imgui*.obj
+del *.obj
 cd ..
 popd

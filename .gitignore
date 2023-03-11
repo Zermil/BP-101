@@ -4,6 +4,7 @@ build/*
 *.ilk
 *.pdb
 *.txt
+*.ini
 
 !LICENSE.txt
 !README.txt

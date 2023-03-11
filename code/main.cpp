@@ -1,14 +1,14 @@
-#include <cstdlib>
-#include <cstdio>
-
 #include "utils.h"
+#include "renderer.h"
+#include "gui.h"
 
 int main(int argc, char **argv)
 {
     UNUSED(argc);
     UNUSED(argv);
-    
-    printf("Hello, Sailor!\n");
-    
+
+    Renderer renderer("Lissajous", 1280, 720);    
+    renderer.render();
+
     return 0;
 }
