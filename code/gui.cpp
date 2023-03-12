@@ -8,7 +8,7 @@
 
 GUI_Layer::GUI_Layer()
     : m_xangle(static_cast<f32>(M_PI / 2.0f)), m_yangle(0.0f),
-      m_xspeed(5), m_yspeed(6)
+      m_xspeed(5), m_yspeed(6), m_animate(true)
 {
     // ...
 }
@@ -81,6 +81,9 @@ void GUI_Layer::draw_control_panel()
         ImGui::Text("Angle for the Y-Axis");
         ImGui::PushItemWidth(375);
         ImGui::SliderAngle("##Y_Axis_Angle", &m_yangle, 0.0f);
+
+        ImGui::Dummy(ImVec2(0, 20));
+        ImGui::Checkbox("Animate", &m_animate);
     } ImGui::End();
 
     ImGui::PopFont();

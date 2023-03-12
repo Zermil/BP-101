@@ -25,6 +25,8 @@ public:
     inline s32 get_xspeed() const noexcept { return(m_xspeed); }
     inline s32 get_yspeed() const noexcept { return(m_yspeed); }
 
+    inline bool get_animate() const noexcept { return(m_animate); }
+
 private:    
     ImFont *m_font;
     
@@ -33,6 +35,8 @@ private:
     
     s32 m_xspeed;
     s32 m_yspeed;
+
+    bool m_animate;
 };
 
 #endif // GUI_H

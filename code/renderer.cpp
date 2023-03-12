@@ -64,11 +64,14 @@ void Renderer::render()
         m_gui.draw_control_panel();
 
         draw_curve(max_points, curve_radius, m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed(), m_gui.get_yspeed());
-        m_indicator.update_indicator(m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed() / 100.0f, m_gui.get_yspeed() / 100.0f);
 
-        u32 x = static_cast<u32>(curve_radius * sin(m_indicator.get_xpos())) + (m_width / 2);
-        u32 y = static_cast<u32>(curve_radius * sin(m_indicator.get_ypos())) + (m_height / 2);
-        draw_circle(x, y, circle_radius);
+        if (m_gui.get_animate()) {
+            m_indicator.update_indicator(m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed() / 100.0f, m_gui.get_yspeed() / 100.0f);
+
+            u32 indicator_x = static_cast<u32>(curve_radius * sin(m_indicator.get_xpos())) + (m_width / 2);
+            u32 indicator_y = static_cast<u32>(curve_radius * sin(m_indicator.get_ypos())) + (m_height / 2);
+            draw_circle(indicator_x, indicator_y, circle_radius);
+        }
 
         m_gui.end_frame();
         SDL_RenderPresent(m_renderer);
@@ -80,7 +83,7 @@ void Renderer::render()
 
 void Renderer::update()
 {
-    m_indicator.update_pos();
+    if (m_gui.get_animate()) m_indicator.update_pos();
 }
 
 void Renderer::handle_events()
