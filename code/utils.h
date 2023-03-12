@@ -16,6 +16,9 @@
         return(r);                              \
     } while (0)      
 
+#define CLAMP_TOP(x, y) ((x) > (y) ? (x) : (y))
+#define CLAMP_BOT(x, y) ((x) < (y) ? (x) : (y))
+
 #define UNUSED(x) ((void)(x))
 
 #endif // UTILS_H
