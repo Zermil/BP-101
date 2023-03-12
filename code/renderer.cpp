@@ -29,6 +29,7 @@ Renderer::Renderer(const char *title, u32 width, u32 height)
     }
 
     m_gui.initialize_gui(m_renderer, m_window);
+    m_camera.set_default_offsets(m_width / 2, m_height / 2);
 }
 
 Renderer::~Renderer()
@@ -41,8 +42,8 @@ Renderer::~Renderer()
 
 void Renderer::render()
 {
-    constexpr u32 circle_radius = 15;
-    constexpr u32 curve_radius = 200;
+    constexpr f32 circle_radius = 15.0f;
+    constexpr f32 curve_radius = 200.0f;
     constexpr u32 max_points = 1024;
     
     while (!m_should_quit) {
@@ -68,9 +69,10 @@ void Renderer::render()
         if (m_gui.get_animate()) {
             m_indicator.update_indicator(m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed() / 100.0f, m_gui.get_yspeed() / 100.0f);
 
-            u32 indicator_x = static_cast<u32>(curve_radius * sin(m_indicator.get_xpos())) + (m_width / 2);
-            u32 indicator_y = static_cast<u32>(curve_radius * sin(m_indicator.get_ypos())) + (m_height / 2);
-            draw_circle(indicator_x, indicator_y, circle_radius);
+            Camera_Coords indicator_coords = m_camera.screen_to_world(curve_radius * sin(m_indicator.get_xpos()),
+                                                                      curve_radius * sin(m_indicator.get_ypos()));
+            
+            draw_circle(indicator_coords.x, indicator_coords.y, circle_radius);
         }
 
         m_gui.end_frame();
@@ -83,7 +85,9 @@ void Renderer::render()
 
 void Renderer::update()
 {
-    if (m_gui.get_animate()) m_indicator.update_pos();
+    if (m_gui.get_animate()) {
+        m_indicator.update_pos();
+    }
 }
 
 void Renderer::handle_events()
@@ -97,19 +101,23 @@ void Renderer::handle_events()
             case SDL_QUIT: {
                 m_should_quit = true;
             } break;
+                
+            default: {
+                m_event_handler.handle_camera_events(e, m_camera);
+            } break;
         }
     }
 }
 
 // https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
-void Renderer::draw_circle(u32 cx, u32 cy, u32 r)
+void Renderer::draw_circle(f32 cx, f32 cy, f32 r)
 {
-    u32 x = r;
-    u32 y = 0;
-    s32 p = 1 - r;
+    f32 x = r;
+    f32 y = 0;
+    f32 p = 1.25f - r;
 
     SDL_SetRenderDrawColor(m_renderer, 255, 36, 0, 255);
-    SDL_RenderDrawLine(m_renderer, cx - r, cy, cx + r, cy);
+    SDL_RenderDrawLineF(m_renderer, cx - r, cy, cx + r, cy);
 
     while (x > y) {
         y += 1;
@@ -121,27 +129,30 @@ void Renderer::draw_circle(u32 cx, u32 cy, u32 r)
             p += 2 * y - 2 * x + 1;
         }
         
-        SDL_RenderDrawLine(m_renderer, cx + x, cy - y, cx - x, cy - y);
-        SDL_RenderDrawLine(m_renderer, cx + x, cy + y, cx - x, cy + y);
-        SDL_RenderDrawLine(m_renderer, cx + y, cy - x, cx - y, cy - x);
-        SDL_RenderDrawLine(m_renderer, cx + y, cy + x, cx - y, cy + x);
+        SDL_RenderDrawLineF(m_renderer, cx + x, cy - y, cx - x, cy - y);
+        SDL_RenderDrawLineF(m_renderer, cx + x, cy + y, cx - x, cy + y);
+        SDL_RenderDrawLineF(m_renderer, cx + y, cy - x, cx - y, cy - x);
+        SDL_RenderDrawLineF(m_renderer, cx + y, cy + x, cx - y, cy + x);
     }
 }
 
 void Renderer::draw_curve(u32 max_points, f32 r, f32 xangle, f32 yangle, s32 xspeed, s32 yspeed)
 {
-    u32 x1 = static_cast<u32>(r * sin(xangle)) + m_width / 2;
-    u32 y1 = static_cast<u32>(r * sin(yangle)) + m_height / 2;
+    f32 x1 = r * sin(xangle);
+    f32 y1 = r * sin(yangle);
     
     for (u32 i = 1; i < max_points; ++i) {
-        u32 x2 = static_cast<u32>(r * sin(xangle)) + m_width / 2;
-        u32 y2 = static_cast<u32>(r * sin(yangle)) + m_height / 2;
+        f32 x2 = r * sin(xangle);
+        f32 y2 = r * sin(yangle);
+        
+        Camera_Coords first_point = m_camera.screen_to_world(x1, y1);
+        Camera_Coords second_point = m_camera.screen_to_world(x2, y2);
 
         xangle += xspeed / 100.0f;
         yangle += yspeed / 100.0f;
 
         SDL_SetRenderDrawColor(m_renderer, 0, 200, 0, 255);
-        SDL_RenderDrawLine(m_renderer, x1, y1, x2, y2);
+        SDL_RenderDrawLineF(m_renderer, first_point.x, first_point.y, second_point.x, second_point.y);
         
         x1 = x2;
         y1 = y2;

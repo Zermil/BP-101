@@ -4,8 +4,11 @@
 #include <SDL2/SDL.h>
 
 #include "types.h"
+
 #include "gui.h"
 #include "indicator.h"
+#include "camera.h"
+#include "event_handler.h"
 
 #define RENDER_TIME_STEP (1.0f / 60.0f)
 
@@ -19,7 +22,7 @@ public:
     void render();
     void handle_events();
 
-    void draw_circle(u32 cx, u32 cy, u32 r);
+    void draw_circle(f32 cx, f32 cy, f32 r);
     void draw_curve(u32 max_points, f32 r, f32 xangle, f32 yangle, s32 xspeed, s32 yspeed);
     
 private:
@@ -38,6 +41,8 @@ private:
     // https://en.wikipedia.org/wiki/Dependency_injection
     GUI_Layer m_gui;
     Indicator m_indicator;
+    Camera m_camera;
+    Event_Handler m_event_handler;
 };
 
 #endif // RENDERER_H
