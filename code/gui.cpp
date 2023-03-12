@@ -58,28 +58,28 @@ void GUI_Layer::draw_control_panel()
     ImGui::PushFont(m_font);
 
     ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(400, 700), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(390, 700), ImGuiCond_FirstUseEver);
 
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
     
     if (ImGui::Begin("Control Panel", 0, window_flags)) {
         ImGui::Text("Speed along the X-Axis");
-        ImGui::PushItemWidth(385);
+        ImGui::PushItemWidth(375);
         ImGui::SliderInt("##X_Axis_Speed", &m_xspeed, 1, 20);        
 
         ImGui::Dummy(ImVec2(0, 20));
         ImGui::Text("Speed along the Y-Axis");
-        ImGui::PushItemWidth(385);
+        ImGui::PushItemWidth(375);
         ImGui::SliderInt("##Y_Axis_Speed", &m_yspeed, 1, 20);
 
         ImGui::Dummy(ImVec2(0, 20));
         ImGui::Text("Angle for the X-Axis");
-        ImGui::PushItemWidth(385);
+        ImGui::PushItemWidth(375);
         ImGui::SliderAngle("##X_Axis_Angle", &m_xangle, 0.0f);
 
         ImGui::Dummy(ImVec2(0, 20));
         ImGui::Text("Angle for the Y-Axis");
-        ImGui::PushItemWidth(385);
+        ImGui::PushItemWidth(375);
         ImGui::SliderAngle("##Y_Axis_Angle", &m_yangle, 0.0f);
     } ImGui::End();
 
