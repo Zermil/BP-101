@@ -40,4 +40,4 @@ private:
     // Indicator m_indicator;
 };
 
-#endif RENDERER_H
+#endif // RENDERER_H

@@ -18,4 +18,4 @@
 
 #define UNUSED(x) ((void)(x))
 
-#endif UTILS_H
+#endif // UTILS_H

@@ -35,4 +35,4 @@ private:
     s32 m_yspeed;
 };
 
-#endif GUI_H
+#endif // GUI_H
