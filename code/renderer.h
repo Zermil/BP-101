@@ -37,7 +37,7 @@ private:
     // Good place for dependency injection in case any of these grows larger
     // https://en.wikipedia.org/wiki/Dependency_injection
     GUI_Layer m_gui;
-    // Indicator m_indicator;
+    Indicator m_indicator;
 };
 
 #endif // RENDERER_H

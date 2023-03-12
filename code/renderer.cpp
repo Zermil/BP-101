@@ -43,7 +43,7 @@ void Renderer::render()
 {
     constexpr u32 circle_radius = 15;
     constexpr u32 curve_radius = 200;
-
+    constexpr u32 max_points = 1024;
     
     while (!m_should_quit) {
         m_current_time = SDL_GetTicks();
@@ -51,7 +51,7 @@ void Renderer::render()
         m_old_time = m_current_time;
 
         handle_events();
-        
+
         while (m_accumulator >= RENDER_TIME_STEP) {
             update();
             m_accumulator -= RENDER_TIME_STEP;
@@ -63,11 +63,12 @@ void Renderer::render()
 
         m_gui.draw_control_panel();
 
-        draw_curve(1024, curve_radius, m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed(), m_gui.get_yspeed());
+        draw_curve(max_points, curve_radius, m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed(), m_gui.get_yspeed());
+        m_indicator.update_indicator(m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed() / 100.0f, m_gui.get_yspeed() / 100.0f);
 
-        u32 cx = static_cast<u32>(curve_radius * sin(m_gui.get_xangle()));
-        u32 cy = static_cast<u32>(curve_radius * sin(m_gui.get_yangle()));
-        draw_circle(cx + (m_width / 2), cy + (m_height / 2), circle_radius);
+        u32 x = static_cast<u32>(curve_radius * sin(m_indicator.get_xpos())) + (m_width / 2);
+        u32 y = static_cast<u32>(curve_radius * sin(m_indicator.get_ypos())) + (m_height / 2);
+        draw_circle(x, y, circle_radius);
 
         m_gui.end_frame();
         SDL_RenderPresent(m_renderer);
@@ -79,8 +80,7 @@ void Renderer::render()
 
 void Renderer::update()
 {
-    // m_gui.set_xangle(m_gui.get_xangle() + (m_gui.get_xspeed() * RENDER_TIME_STEP));
-    // m_gui.set_yangle(m_gui.get_yangle() + (m_gui.get_yspeed() * RENDER_TIME_STEP));
+    m_indicator.update_pos();
 }
 
 void Renderer::handle_events()
