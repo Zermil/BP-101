@@ -17,5 +17,6 @@ Build (remember to change "MSVC_PATH" in the build script)
 Run
 
 ```console
-> build\curves.exe
+> cd build
+> curves.exe
 ```
