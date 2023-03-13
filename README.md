@@ -20,3 +20,7 @@ Run
 > cd build
 > curves.exe
 ```
+
+## Preview
+
+![](./preview.gif)
