@@ -16,6 +16,13 @@
         return(r);                              \
     } while (0)      
 
+#define FREE_IF_NOT_NULL(x)                     \
+    do {                                        \
+        if ((x) != 0) {                         \
+            delete x;                           \
+        }                                       \
+    } while(0)
+
 #define CLAMP_TOP(x, y) ((x) > (y) ? (x) : (y))
 #define CLAMP_BOT(x, y) ((x) < (y) ? (x) : (y))
 

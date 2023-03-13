@@ -5,7 +5,8 @@
 
 Renderer::Renderer(const char *title, u32 width, u32 height)
     : m_width(width), m_height(height), m_should_quit(false),
-      m_old_time(SDL_GetTicks()), m_accumulator(0.0f)
+      m_old_time(SDL_GetTicks()), m_accumulator(0.0f),
+      m_gui(nullptr), m_camera(nullptr), m_event_handler(nullptr)
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         ERROR_EXIT("[ERROR]: Could not initialize SDL\n");
@@ -27,9 +28,6 @@ Renderer::Renderer(const char *title, u32 width, u32 height)
     if (m_renderer == 0) {
         ERROR_EXIT("[ERROR]: Could not create SDL renderer\n");
     }
-
-    m_gui.initialize_gui(m_renderer, m_window);
-    m_camera.set_default_offsets(m_width / 2, m_height / 2);
 }
 
 Renderer::~Renderer()
@@ -38,6 +36,20 @@ Renderer::~Renderer()
     SDL_DestroyRenderer(m_renderer);
     
     SDL_Quit();
+
+    FREE_IF_NOT_NULL(m_gui);
+    FREE_IF_NOT_NULL(m_camera);
+    FREE_IF_NOT_NULL(m_event_handler);
+}
+
+void Renderer::setup_dependencies(GUI_Layer *gui, Camera *camera, Event_Handler *event_handler)
+{
+    m_gui = gui;
+    m_camera = camera;
+    m_event_handler = event_handler;
+
+    m_gui->initialize_gui(m_renderer, m_window);
+    m_camera->set_default_offsets(m_width / 2, m_height / 2);
 }
 
 void Renderer::render()
@@ -60,22 +72,22 @@ void Renderer::render()
         
         SDL_SetRenderDrawColor(m_renderer, 18, 18, 18, 255);
         SDL_RenderClear(m_renderer);
-        m_gui.begin_frame();
+        m_gui->begin_frame();
 
-        m_gui.draw_control_panel();
+        m_gui->draw_control_panel();
 
-        draw_curve(max_points, curve_radius, m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed(), m_gui.get_yspeed());
+        draw_curve(max_points, curve_radius, m_gui->get_xangle(), m_gui->get_yangle(), m_gui->get_xspeed(), m_gui->get_yspeed());
 
-        if (m_gui.get_animate()) {
-            m_indicator.update_indicator(m_gui.get_xangle(), m_gui.get_yangle(), m_gui.get_xspeed() / 100.0f, m_gui.get_yspeed() / 100.0f);
+        if (m_gui->get_animate()) {
+            m_indicator.update_indicator(m_gui->get_xangle(), m_gui->get_yangle(), m_gui->get_xspeed() / 100.0f, m_gui->get_yspeed() / 100.0f);
 
-            Camera_Coords indicator_coords = m_camera.screen_to_world(curve_radius * sin(m_indicator.get_xpos()),
+            Camera_Coords indicator_coords = m_camera->screen_to_world(curve_radius * sin(m_indicator.get_xpos()),
                                                                       curve_radius * sin(m_indicator.get_ypos()));
             
             draw_circle(indicator_coords.x, indicator_coords.y, circle_radius);
         }
 
-        m_gui.end_frame();
+        m_gui->end_frame();
         SDL_RenderPresent(m_renderer);
 
         // Be nice to the CPU
@@ -87,7 +99,7 @@ void Renderer::update()
 {
     if (ImGui::GetIO().WantCaptureMouse) return;
 
-    if (m_gui.get_animate()) {
+    if (m_gui->get_animate()) {
         m_indicator.update_pos();
     }
 }
@@ -97,7 +109,7 @@ void Renderer::handle_events()
     SDL_Event e = {0};
 
     while (SDL_PollEvent(&e)) {
-        m_gui.process_events(&e);
+        m_gui->process_events(&e);
         
         switch (e.type) {
             case SDL_QUIT: {
@@ -105,7 +117,7 @@ void Renderer::handle_events()
             } break;
                 
             default: {
-                m_event_handler.handle_camera_events(e, m_camera);
+                m_event_handler->handle_camera_events(e, *m_camera);
             } break;
         }
     }
@@ -147,8 +159,8 @@ void Renderer::draw_curve(u32 max_points, f32 r, f32 xangle, f32 yangle, s32 xsp
         f32 x2 = r * sin(xangle);
         f32 y2 = r * sin(yangle);
         
-        Camera_Coords first_point = m_camera.screen_to_world(x1, y1);
-        Camera_Coords second_point = m_camera.screen_to_world(x2, y2);
+        Camera_Coords first_point = m_camera->screen_to_world(x1, y1);
+        Camera_Coords second_point = m_camera->screen_to_world(x2, y2);
 
         xangle += xspeed / 100.0f;
         yangle += yspeed / 100.0f;
