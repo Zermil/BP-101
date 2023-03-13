@@ -1,6 +1,6 @@
 # BP-101
 
-[Lissajous Curves](https://en.wikipedia.org/wiki/Lissajous_curve).
+College project, rendering and simulating [Lissajous Curves](https://en.wikipedia.org/wiki/Lissajous_curve).
 
 Made with: 
 - [SDL2](https://www.libsdl.org/)
