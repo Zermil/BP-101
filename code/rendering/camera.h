@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "types.h"
+#include "../types.h"
 
 struct Camera_Coords {
     f32 x;

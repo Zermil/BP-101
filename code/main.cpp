@@ -1,5 +1,5 @@
 #include "utils.h"
-#include "renderer.h"
+#include "./rendering/renderer.h"
 
 int main(int argc, char **argv)
 {

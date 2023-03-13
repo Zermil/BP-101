@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL.h>
 
-#include "types.h"
-#include "camera.h"
+#include "../types.h"
+#include "../rendering/camera.h"
 
 class Event_Handler {
 public:

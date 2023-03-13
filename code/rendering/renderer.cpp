@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "renderer.h"
-#include "utils.h"
+#include "../utils.h"
 
 Renderer::Renderer(const char *title, u32 width, u32 height)
     : m_width(width), m_height(height), m_should_quit(false),

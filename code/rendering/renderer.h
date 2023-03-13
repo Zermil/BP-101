@@ -3,12 +3,12 @@
 
 #include <SDL2/SDL.h>
 
-#include "types.h"
+#include "../types.h"
 
-#include "gui.h"
-#include "indicator.h"
+#include "../ui/gui.h"
+#include "../ui/indicator.h"
 #include "camera.h"
-#include "event_handler.h"
+#include "../events/event_handler.h"
 
 #define RENDER_TIME_STEP (1.0f / 60.0f)
 

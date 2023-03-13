@@ -1,7 +1,7 @@
 #ifndef INDICATOR_H
 #define INDICATOR_H
 
-#include "types.h"
+#include "../types.h"
 
 class Indicator {
 public:

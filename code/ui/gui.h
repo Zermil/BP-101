@@ -1,7 +1,7 @@
 #ifndef GUI_H
 #define GUI_H
 
-#include "types.h"
+#include "../types.h"
 #include <imgui/imgui.h>
 #include <SDL2/SDL.h>
 
