@@ -85,6 +85,8 @@ void Renderer::render()
 
 void Renderer::update()
 {
+    if (ImGui::GetIO().WantCaptureMouse) return;
+
     if (m_gui.get_animate()) {
         m_indicator.update_pos();
     }

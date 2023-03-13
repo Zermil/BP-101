@@ -1,5 +1,4 @@
 #include <imgui/imgui.h>
-#include <cstdio>
 
 #include "utils.h"
 #include "event_handler.h"

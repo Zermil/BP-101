@@ -1,5 +1,3 @@
-#include <cstdio>
-
 #include "camera.h"
 
 Camera::Camera()
