@@ -1,9 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <cstdio>
-#include <cstdlib>
-
 #define ERROR_EXIT(msg, ...)                    \
     do {                                        \
         fprintf(stderr, (msg), __VA_ARGS__);    \

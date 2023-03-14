@@ -1,4 +1,6 @@
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #include "renderer.h"
 #include "../utils.h"
